@@ -1,4 +1,4 @@
-%function [h,k,error] = heat_CN(m)
+% function [h,k,error] = HW7Prob5(m)
 %
 % heat_CN.m
 %
@@ -14,13 +14,15 @@
 clf              % clear graphics
 hold on          % Put all plots on the same graph (comment out if desired)
 
-ax = 0;
+ax = -1;
 bx = 1;
 kappa = .02;               % heat conduction coefficient:
 tfinal = 1;                % final time
 errvec = [];
 
-mvals = [8 18 38 68 98];
+%mvals = [39 59 99 199];
+%mvals = [38 58 98 198];
+mvals = [38];
 hvals = [];
 kvals = [];
 for ii=1:length(mvals)
@@ -29,7 +31,7 @@ for ii=1:length(mvals)
     hvals = [hvals h];
     x = linspace(ax,bx,m+2)';  % note x(1)=0 and x(m+2)=1
                            % u(1)=g0 and u(m+2)=g1 are known from BC's
-    k = 4*h; %just picking a k=O(h)                  % time step
+    k = h; %time step tp get reasonable results                  % time step
     kvals = [kvals k];
     
     
@@ -48,11 +50,13 @@ for ii=1:length(mvals)
 
     % true solution for comparison:
     % For Gaussian initial conditions u(x,0) = exp(-beta * (x-0.4)^2)
-    beta = 150;
-    utrue = @(x,t) exp(-(x-0.4).^2 / (4*kappa*t + 1/beta)) / sqrt(4*beta*kappa*t+1);
+%     beta = 150;
+%     utrue = @(x,t) exp(-(x-0.4).^2 / (4*kappa*t + 1/beta)) / sqrt(4*beta*kappa*t+1);
+    utrue = @(x,t) 0.5*erfc(x/sqrt(4*kappa*t));
 
     % initial conditions:
-    u0 = utrue(x,0);
+%     u0 = utrue(x,0);
+    u0 = @(x,t) 1*(x<0)+0*(x>=0); %ICs
 
 
     % Each time step we solve MOL system U' = AU + g using the Trapezoidal method
@@ -71,7 +75,7 @@ for ii=1:length(mvals)
 
     % initialize u and plot:
     tn = 0;
-    u = u0;
+    u = u0(x,0);
     
     figure(ii)
     plot(x,u,'b.-', xfine,ufine,'r')

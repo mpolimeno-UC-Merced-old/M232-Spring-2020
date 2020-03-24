@@ -20,8 +20,9 @@ kappa = .02;               % heat conduction coefficient:
 tfinal = 1;                % final time
 errvec = [];
 
-mvals = [8 18 48 68 98];
+mvals = [8 18 38 68 98];
 hvals = [];
+kvals = [];
 for ii=1:length(mvals)
     m = mvals(ii);
     h = (bx-ax)/(m+1);         % h = delta x
@@ -29,7 +30,9 @@ for ii=1:length(mvals)
     x = linspace(ax,bx,m+2)';  % note x(1)=0 and x(m+2)=1
                            % u(1)=g0 and u(m+2)=g1 are known from BC's
     k = 24*h^2; %just picking a k=O(h)                  % time step
-
+    kvals = [kvals k];
+    
+    
     nsteps = round(tfinal / k);    % number of time steps
     %nplot = 1;      % plot solution every nplot time steps
                  % (set nplot=2 to plot every 2 time steps, etc.)
@@ -124,7 +127,7 @@ for ii=1:length(mvals)
     end
 end
 
-error_table(hvals, errvec);   % print tables of errors and ratios
+error_table(hvals, kvals, errvec);   % print tables of errors and ratios
 
 figure(ii+6)
 error_loglog(hvals, errvec);  % produce log-log plot of errors and least squares fit
