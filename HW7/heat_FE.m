@@ -106,7 +106,7 @@ for ii=1:length(mvals)
         uint = rhs;
 
         % augment with boundary values:
-        u = [g0np; uint; g1np]; %why gnp and not gn
+        u = [g0np; uint; g1np];
         % plot results at desired times:
         if mod(n,nplot)==0 || n==nsteps
             ufine = utrue(xfine,tnp);
