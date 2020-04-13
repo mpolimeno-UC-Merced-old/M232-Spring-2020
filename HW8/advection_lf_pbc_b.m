@@ -63,7 +63,8 @@ plot(x,u0,'b.-', xfine,ufine,'r')
 axis([0 1 -.2 1.2])
 legend('computed','true')
 title(sprintf('Initial data at time = 0 with %5i grid points',m+1)) %m+1 beacuse at x(m+2)=x(1)
-
+xlabel('x','interpreter','latex','fontsize',15)
+ylabel('u(x,t)','interpreter','latex','fontsize',15)
 % input('Hit <return> to continue  ');
 tn = tnp;
 % main time-stepping loop:
@@ -81,13 +82,15 @@ for n = 2:nsteps
      if mod(n,1000)==0 || n==nsteps
         uint = u(1:m+2);  % points on the interval (drop ghost cell on right)
         ufine = utrue(xfine,tnp);
+        error = max(abs(uint-utrue(x,tnp)));
         figure(n)
         plot(x,uint,'b.-', xfine,ufine,'r')
         axis([0 1 -.2 1.2])
         title(sprintf('t = %9.5e  after %4i time steps with %5i grid points',...
                        tnp,n,m+1))
-        error = max(abs(uint-utrue(x,tnp)));
-        fprintf('at time t = %9.5e  max error =  %9.5e\n',tnp,error)
+        legend('computed','true')
+        xlabel('x','interpreter','latex','fontsize',15)
+        ylabel('u(x,t)','interpreter','latex','fontsize',15)
 %         if n<nsteps, input('Hit <return> to continue  '); 
 %         end
      end
